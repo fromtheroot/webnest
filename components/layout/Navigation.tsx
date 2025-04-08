@@ -9,7 +9,7 @@ const Navigation = () => {
 
   const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'Dashboard', href: '/dashboard' },
+    { label: 'Modules', href: '/modules' },
   ];
 
   return (

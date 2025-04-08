@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ 
+  subsets: ['latin'],
+  variable: '--font-montserrat'
+});
 
 export const metadata: Metadata = {
-  title: "WebNest Starter",
-  description: "Modern WebNest starter template with Next.js, shadcn/ui and TailwindCSS",
+  title: "WebNest",
+  description: "A modern web application template",
 };
 
 export default function RootLayout({
@@ -19,7 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <head />
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        montserrat.variable
+      )}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

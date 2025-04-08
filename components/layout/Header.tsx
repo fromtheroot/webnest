@@ -10,7 +10,7 @@ const Header = () => {
         <div className="flex items-center gap-6 pl-4">
           <Link className="flex items-center space-x-2" href="/">
             <span className="font-bold">
-              WebNest Starter
+              WebNest
             </span>
           </Link>
           <Navigation />

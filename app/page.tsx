@@ -223,7 +223,7 @@ export default function Home() {
 
       <div className="w-full max-w-7xl mx-auto space-y-8 relative z-10">
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight">Welcome to WebNest Starter</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Welcome to WebNest</h1>
           <p className="text-lg text-muted-foreground mt-2">
             A modern template with Next.js, shadcn/ui, and TailwindCSS
           </p>
