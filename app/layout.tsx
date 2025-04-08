@@ -8,8 +8,8 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Next.js Starter Template",
-  description: "Modern Next.js starter template with shadcn/ui and TailwindCSS",
+  title: "WebNest Starter",
+  description: "Modern WebNest starter template with Next.js, shadcn/ui and TailwindCSS",
 };
 
 export default function RootLayout({

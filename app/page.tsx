@@ -1,15 +1,16 @@
 'use client';
 
 import React from "react";
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import {
   Code,
   Palette,
-  Layout,
   Sparkles,
   Component,
   Layers,
+  Container,
+  Github,
+  Globe,
 } from "lucide-react";
 
 // Utility function for class name merging
@@ -19,7 +20,7 @@ const cn = (...classes: (string | boolean | undefined | null | Record<string, bo
     .map((c) => {
       if (typeof c === "object" && c !== null) {
         return Object.entries(c)
-          .filter(([_, value]) => Boolean(value))
+          .filter(([, value]) => Boolean(value))
           .map(([key]) => key);
       }
       return c;
@@ -180,11 +181,27 @@ export default function Home() {
       colSpan: 2,
     },
     {
-      title: "Modern Stack",
+      title: "Fast Docker Deployment",
       meta: "Full-Stack",
-      description: "Built with the latest web technologies for optimal developer experience",
-      icon: <Layers className="w-4 h-4 text-orange-500" />,
-      tags: ["Development", "Stack"],
+      description: "Ready-to-use Docker configuration for both development and production environments",
+      icon: <Container className="w-4 h-4 text-blue-500" />,
+      tags: ["Docker", "DevOps"],
+    },
+    {
+      title: "GitHub Repository",
+      meta: "Open Source",
+      description: "Explore the source code, contribute, or fork the project to create your own version",
+      icon: <Github className="w-4 h-4 text-gray-500" />,
+      tags: ["Source", "Community"],
+      action: () => window.open('https://github.com/fromtheroot/webnest', '_blank'),
+    },
+    {
+      title: "From the Root",
+      meta: "Studio",
+      description: "Discover more amazing projects and resources from From the Root studio",
+      icon: <Globe className="w-4 h-4 text-green-500" />,
+      tags: ["Studio", "Resources"],
+      action: () => window.open('https://fromtheroot.studio/', '_blank'),
     },
   ];
 
@@ -206,7 +223,7 @@ export default function Home() {
 
       <div className="w-full max-w-7xl mx-auto space-y-8 relative z-10">
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight">Welcome to Next.js Starter</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Welcome to WebNest Starter</h1>
           <p className="text-lg text-muted-foreground mt-2">
             A modern template with Next.js, shadcn/ui, and TailwindCSS
           </p>

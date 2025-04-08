@@ -1,17 +1,18 @@
 import Navigation from './Navigation';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import Link from 'next/link';
 
 const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full flex items-center justify-between h-14">
         <div className="flex items-center gap-6 pl-4">
-          <a className="flex items-center space-x-2" href="/">
+          <Link className="flex items-center space-x-2" href="/">
             <span className="font-bold">
-              Next.js Starter
+              WebNest Starter
             </span>
-          </a>
+          </Link>
           <Navigation />
         </div>
         <div className="flex items-center gap-2 pr-4">
