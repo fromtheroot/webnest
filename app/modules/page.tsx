@@ -6,15 +6,18 @@ import {
   Calendar,
   Clock,
   CloudRain,
-  Compass,
+  MessageSquare,
   DollarSign,
   Globe,
   Thermometer,
   Timer,
   Waves,
-  X
+  X,
+  Send
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 // Utility function for class name merging (copied from home page)
 const cn = (...classes: (string | boolean | undefined | null | Record<string, boolean>)[]): string => {
@@ -360,126 +363,113 @@ const TideModule = () => {
   );
 };
 
-const CompassModule = () => {
+const ChatModule = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [heading, setHeading] = useState(0);
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([
+    { id: 1, text: 'Hello! How can I help you today?', sender: 'bot' },
+  ]);
   
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    
+    setMessages([
+      ...messages,
+      { id: messages.length + 1, text: message, sender: 'user' },
+    ]);
+    setMessage('');
+    
+    // Simulate bot response
+    setTimeout(() => {
+      setMessages(prev => [
+        ...prev,
+        { 
+          id: prev.length + 1, 
+          text: 'Thanks for your message! This is a demo response.', 
+          sender: 'bot' 
+        },
+      ]);
+    }, 1000);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <div onClick={() => setIsOpen(true)} className="cursor-pointer">
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 dark:bg-white/10 group-hover:bg-gradient-to-br from-orange-500/20 to-orange-500/30 transition-all duration-300">
-              <Compass className="w-5 h-5 text-orange-500" />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 dark:bg-white/10 group-hover:bg-gradient-to-br from-violet-500/20 to-violet-500/30 transition-all duration-300">
+              <MessageSquare className="w-5 h-5 text-violet-500" />
             </div>
-            <span className="font-semibold">Compass</span>
+            <span className="font-semibold">Chat</span>
           </div>
-          <div className="flex flex-col items-center">
-            <div 
-              className="w-32 h-32 rounded-full border-2 border-orange-500 relative"
-              style={{ transform: `rotate(${heading}deg)` }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-1 h-8 bg-orange-500 transform -translate-y-2" />
-              </div>
-              {['N', 'E', 'S', 'W'].map((direction) => (
-                <span
-                  key={direction}
-                  className="absolute text-sm font-semibold"
-                  style={{
-                    transform: `rotate(${-heading}deg)`,
-                    top: direction === 'N' ? '4px' : direction === 'S' ? 'auto' : '50%',
-                    bottom: direction === 'S' ? '4px' : 'auto',
-                    left: direction === 'W' ? '4px' : direction === 'E' ? 'auto' : '50%',
-                    right: direction === 'E' ? '4px' : 'auto',
-                    marginTop: ['E', 'W'].includes(direction) ? '-0.5em' : undefined,
-                    marginLeft: ['N', 'S'].includes(direction) ? '-0.5em' : undefined,
-                  }}
+          <div className="space-y-3">
+            <div className="text-sm text-muted-foreground">Recent messages</div>
+            <div className="space-y-2">
+              {messages.slice(-2).map((msg) => (
+                <div
+                  key={msg.id}
+                  className={cn(
+                    "text-sm p-2 rounded-lg",
+                    msg.sender === 'user' 
+                      ? "bg-primary text-primary-foreground ml-auto" 
+                      : "bg-muted"
+                  )}
+                  style={{ maxWidth: '80%' }}
                 >
-                  {direction}
-                </span>
+                  {msg.text}
+                </div>
               ))}
-            </div>
-            <div className="mt-4">
-              <input
-                type="range"
-                min="0"
-                max="359"
-                value={heading}
-                onChange={(e) => setHeading(parseInt(e.target.value))}
-                className="w-full"
-              />
-              <div className="text-center font-mono mt-2">{heading}°</div>
             </div>
           </div>
         </div>
       </div>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Compass Details</DialogTitle>
+          <DialogTitle>Chat</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-6 py-4">
-          <div className="space-y-4">
-            <div className="flex flex-col items-center">
-              <div 
-                className="w-48 h-48 rounded-full border-2 border-orange-500 relative"
-                style={{ transform: `rotate(${heading}deg)` }}
+        <div className="flex flex-col h-[400px]">
+          <div className="flex-1 overflow-y-auto space-y-4 p-4">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={cn(
+                  "flex",
+                  msg.sender === 'user' ? "justify-end" : "justify-start"
+                )}
               >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-1 h-12 bg-orange-500 transform -translate-y-3" />
-                </div>
-                {['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'].map((direction, index) => (
-                  <span
-                    key={direction}
-                    className="absolute text-sm font-semibold"
-                    style={{
-                      transform: `
-                        rotate(${-heading}deg)
-                        translate(0, -${direction.length === 1 ? '24px' : '20px'})
-                        rotate(${index * 45}deg)
-                      `,
-                      left: '50%',
-                      top: '50%',
-                    }}
-                  >
-                    {direction}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm text-muted-foreground">Heading</label>
-                <input
-                  type="range"
-                  min="0"
-                  max="359"
-                  value={heading}
-                  onChange={(e) => setHeading(parseInt(e.target.value))}
-                  className="w-full mt-2"
-                />
-                <div className="text-center font-mono mt-2 text-lg">{heading}° {
-                  heading >= 337.5 || heading < 22.5 ? 'N' :
-                  heading < 67.5 ? 'NE' :
-                  heading < 112.5 ? 'E' :
-                  heading < 157.5 ? 'SE' :
-                  heading < 202.5 ? 'S' :
-                  heading < 247.5 ? 'SW' :
-                  heading < 292.5 ? 'W' :
-                  'NW'
-                }</div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <div className="text-sm text-muted-foreground">True North</div>
-                  <div className="font-medium">Aligned</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-sm text-muted-foreground">Magnetic Declination</div>
-                  <div className="font-medium">13.5° E</div>
+                <div
+                  className={cn(
+                    "max-w-[80%] p-3 rounded-lg text-sm",
+                    msg.sender === 'user'
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
+                  )}
+                >
+                  {msg.text}
                 </div>
               </div>
-            </div>
+            ))}
+          </div>
+          <div className="border-t p-4 flex gap-2">
+            <Input
+              placeholder="Type a message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+              className="flex-1"
+            />
+            <Button
+              size="icon"
+              onClick={handleSendMessage}
+              disabled={!message.trim()}
+            >
+              <Send className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </DialogContent>
@@ -657,7 +647,7 @@ export default function ModulesPage() {
             <TideModule />
           </ModuleWrapper>
           <ModuleWrapper>
-            <CompassModule />
+            <ChatModule />
           </ModuleWrapper>
           <ModuleWrapper>
             <StopwatchModule />
