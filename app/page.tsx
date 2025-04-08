@@ -172,13 +172,14 @@ export default function Home() {
       action: () => window.open('https://tailwindcss.com', '_blank'),
     },
     {
-      title: "TypeScript",
-      meta: "Type-Safe",
-      description: "Write more reliable code with static typing and modern JavaScript features",
+      title: "Interactive Modules",
+      meta: "Components",
+      description: "Explore our collection of beautiful and interactive modules ready to use in your applications",
       icon: <Code className="w-4 h-4 text-sky-500" />,
-      status: "Stable",
-      tags: ["Development", "Types"],
+      status: "Explore",
+      tags: ["Components", "Interactive"],
       colSpan: 2,
+      action: () => window.location.href = '/modules',
     },
     {
       title: "Fast Docker Deployment",
@@ -186,14 +187,6 @@ export default function Home() {
       description: "Ready-to-use Docker configuration for both development and production environments",
       icon: <Container className="w-4 h-4 text-blue-500" />,
       tags: ["Docker", "DevOps"],
-    },
-    {
-      title: "GitHub Repository",
-      meta: "Open Source",
-      description: "Explore the source code, contribute, or fork the project to create your own version",
-      icon: <Github className="w-4 h-4 text-gray-500" />,
-      tags: ["Source", "Community"],
-      action: () => window.open('https://github.com/fromtheroot/webnest', '_blank'),
     },
     {
       title: "From the Root",
@@ -223,10 +216,12 @@ export default function Home() {
 
       <div className="w-full max-w-7xl mx-auto space-y-8 relative z-10">
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight">Welcome to WebNest</h1>
+          <h1 className="text-4xl font-bold tracking-tight">WebNest</h1>
           <p className="text-lg text-muted-foreground mt-2">
-            A modern template with Next.js, shadcn/ui, and TailwindCSS
+            A modern starter template with Next.js, shadcn/ui, and TailwindCSS
           </p>
+          <br />
+          <p className="text-muted-foreground text-sm">Version 1.0.5</p>
         </div>
 
         <BentoGrid items={items} />

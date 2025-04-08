@@ -1,6 +1,8 @@
 # WebNest
 A modern web application starter template built with Next.js 14, shadcn/ui, and TailwindCSS.
 
+```Version 1.0.5```
+
 ## Features
 - ⚡️ Next.js 14 with App Router
 - 🎨 Styled with TailwindCSS

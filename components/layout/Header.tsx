@@ -1,7 +1,10 @@
+'use client';
+
 import Navigation from './Navigation';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
+import { Github } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -16,6 +19,15 @@ const Header = () => {
           <Navigation />
         </div>
         <div className="flex items-center gap-2 pr-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => window.open('https://github.com/fromtheroot/webnest', '_blank')}
+          >
+            <Github className="h-4 w-4" />
+            <span className="sr-only">GitHub</span>
+          </Button>
           <ThemeToggle />
           <Button variant="ghost" size="sm">
             Login
