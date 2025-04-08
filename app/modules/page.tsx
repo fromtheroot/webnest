@@ -13,7 +13,15 @@ import {
   Timer,
   Waves,
   X,
-  Send
+  Send,
+  Calculator,
+  Plus,
+  Minus,
+  X as Multiply,
+  Divide,
+  Equal,
+  CalendarDays,
+  Bell
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -608,6 +616,285 @@ const StopwatchModule = () => {
   );
 };
 
+const CalculatorModule = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [display, setDisplay] = useState('0');
+  const [equation, setEquation] = useState('');
+  const [shouldResetDisplay, setShouldResetDisplay] = useState(false);
+
+  const handleNumber = (num: string) => {
+    if (shouldResetDisplay) {
+      setDisplay(num);
+      setShouldResetDisplay(false);
+    } else {
+      setDisplay(display === '0' ? num : display + num);
+    }
+  };
+
+  const handleOperator = (op: string) => {
+    setShouldResetDisplay(true);
+    setEquation(display + ' ' + op + ' ');
+  };
+
+  const handleEqual = () => {
+    try {
+      const result = eval(equation + display);
+      setDisplay(String(result));
+      setEquation('');
+    } catch (error) {
+      setDisplay('Error');
+    }
+    setShouldResetDisplay(true);
+  };
+
+  const handleClear = () => {
+    setDisplay('0');
+    setEquation('');
+    setShouldResetDisplay(false);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <div onClick={() => setIsOpen(true)} className="cursor-pointer">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 dark:bg-white/10 group-hover:bg-gradient-to-br from-orange-500/20 to-orange-500/30 transition-all duration-300">
+              <Calculator className="w-5 h-5 text-orange-500" />
+            </div>
+            <span className="font-semibold">Calculator</span>
+          </div>
+          <div className="font-mono text-2xl text-right">{display}</div>
+        </div>
+      </div>
+      <DialogContent className="sm:max-w-[300px]">
+        <DialogHeader>
+          <DialogTitle>Calculator</DialogTitle>
+        </DialogHeader>
+        <div className="p-4">
+          <div className="bg-muted p-4 rounded-lg mb-4">
+            <div className="text-sm text-muted-foreground">{equation}</div>
+            <div className="text-3xl font-mono text-right">{display}</div>
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            <button onClick={handleClear} className="col-span-2 p-4 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90">AC</button>
+            <button onClick={() => handleOperator('/')} className="p-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"><Divide className="w-4 h-4" /></button>
+            <button onClick={() => handleOperator('*')} className="p-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"><Multiply className="w-4 h-4" /></button>
+            {[7, 8, 9].map(num => (
+              <button key={num} onClick={() => handleNumber(String(num))} className="p-4 rounded-lg bg-accent hover:bg-accent/90">{num}</button>
+            ))}
+            <button onClick={() => handleOperator('-')} className="p-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"><Minus className="w-4 h-4" /></button>
+            {[4, 5, 6].map(num => (
+              <button key={num} onClick={() => handleNumber(String(num))} className="p-4 rounded-lg bg-accent hover:bg-accent/90">{num}</button>
+            ))}
+            <button onClick={() => handleOperator('+')} className="p-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"><Plus className="w-4 h-4" /></button>
+            {[1, 2, 3].map(num => (
+              <button key={num} onClick={() => handleNumber(String(num))} className="p-4 rounded-lg bg-accent hover:bg-accent/90">{num}</button>
+            ))}
+            <button onClick={handleEqual} className="p-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"><Equal className="w-4 h-4" /></button>
+            <button onClick={() => handleNumber('0')} className="col-span-2 p-4 rounded-lg bg-accent hover:bg-accent/90">0</button>
+            <button onClick={() => handleNumber('.')} className="p-4 rounded-lg bg-accent hover:bg-accent/90">.</button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const CalendarEventsModule = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [events] = useState([
+    { id: 1, title: 'Team Meeting', date: '2024-04-15 10:00', type: 'work' },
+    { id: 2, title: 'Lunch with Client', date: '2024-04-15 12:30', type: 'work' },
+    { id: 3, title: 'Gym Session', date: '2024-04-15 17:00', type: 'personal' },
+    { id: 4, title: 'Project Deadline', date: '2024-04-16 15:00', type: 'work' },
+    { id: 5, title: 'Birthday Party', date: '2024-04-17 19:00', type: 'personal' },
+  ]);
+
+  // Helper function to format time consistently
+  const formatTime = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${ampm}`;
+  };
+
+  // Helper function to format date consistently
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const dayName = days[date.getDay()];
+    const monthName = months[date.getMonth()];
+    const day = date.getDate();
+    return `${dayName}, ${monthName} ${day}`;
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <div onClick={() => setIsOpen(true)} className="cursor-pointer">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 dark:bg-white/10 group-hover:bg-gradient-to-br from-pink-500/20 to-pink-500/30 transition-all duration-300">
+              <CalendarDays className="w-5 h-5 text-pink-500" />
+            </div>
+            <span className="font-semibold">Calendar</span>
+          </div>
+          <div className="space-y-2">
+            {events.slice(0, 2).map(event => (
+              <div key={event.id} className="flex items-center justify-between">
+                <span className="text-sm truncate">{event.title}</span>
+                <span className="text-sm text-muted-foreground">
+                  {formatTime(event.date)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Calendar Events</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6 p-4">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Upcoming Events</h3>
+            <Button variant="outline" size="sm">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Event
+            </Button>
+          </div>
+          <div className="space-y-4">
+            {events.map(event => (
+              <div
+                key={event.id}
+                className="p-4 rounded-lg border flex items-center justify-between hover:bg-accent transition-colors"
+              >
+                <div className="space-y-1">
+                  <div className="font-medium">{event.title}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {formatDate(event.date)} at {formatTime(event.date)}
+                  </div>
+                </div>
+                <div className={cn(
+                  "px-2 py-1 rounded text-xs font-medium",
+                  event.type === 'work' 
+                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                    : "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                )}>
+                  {event.type}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const TimerModule = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [isRunning, setIsRunning] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(300);
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((time) => {
+          if (time <= 1) {
+            setIsRunning(false);
+            return 0;
+          }
+          return time - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleReset = () => {
+    setTimeLeft(selectedTime);
+    setIsRunning(false);
+  };
+
+  const presetTimes = [
+    { label: '1m', seconds: 60 },
+    { label: '3m', seconds: 180 },
+    { label: '5m', seconds: 300 },
+    { label: '10m', seconds: 600 },
+  ];
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <div onClick={() => setIsOpen(true)} className="cursor-pointer">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-black/5 dark:bg-white/10 group-hover:bg-gradient-to-br from-yellow-500/20 to-yellow-500/30 transition-all duration-300">
+              <Bell className="w-5 h-5 text-yellow-500" />
+            </div>
+            <span className="font-semibold">Timer</span>
+          </div>
+          <div className="font-mono text-2xl text-center">{formatTime(timeLeft)}</div>
+        </div>
+      </div>
+      <DialogContent className="sm:max-w-[400px]">
+        <DialogHeader>
+          <DialogTitle>Timer</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6 p-4">
+          <div className="flex flex-col items-center">
+            <div className="font-mono text-6xl mb-8">{formatTime(timeLeft)}</div>
+            <div className="flex gap-2 mb-6">
+              {presetTimes.map((time) => (
+                <button
+                  key={time.seconds}
+                  onClick={() => {
+                    setSelectedTime(time.seconds);
+                    setTimeLeft(time.seconds);
+                    setIsRunning(false);
+                  }}
+                  className={cn(
+                    "px-3 py-1 rounded-full text-sm",
+                    selectedTime === time.seconds
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                  )}
+                >
+                  {time.label}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-3">
+              <button
+                className="px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                onClick={() => setIsRunning(!isRunning)}
+              >
+                {isRunning ? 'Pause' : 'Start'}
+              </button>
+              <button
+                className="px-6 py-3 rounded-lg border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                onClick={handleReset}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default function ModulesPage() {
   return (
     <div className="min-h-[calc(100vh-3.5rem)] p-4 relative overflow-hidden flex items-center">
@@ -651,6 +938,15 @@ export default function ModulesPage() {
           </ModuleWrapper>
           <ModuleWrapper>
             <StopwatchModule />
+          </ModuleWrapper>
+          <ModuleWrapper>
+            <CalculatorModule />
+          </ModuleWrapper>
+          <ModuleWrapper>
+            <CalendarEventsModule />
+          </ModuleWrapper>
+          <ModuleWrapper>
+            <TimerModule />
           </ModuleWrapper>
         </div>
       </div>
